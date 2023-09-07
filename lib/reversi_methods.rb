@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require_relative './position'
-require 'debug'
 
 module ReversiMethods
   WHITE_STONE = 'W'
@@ -53,30 +52,20 @@ module ReversiMethods
     turn_succeed = false
     Position::DIRECTIONS.each do |direction|
       next_pos = pos.next_position(direction)
-      # binding.break
       turn_succeed = true if turn(copied_board, next_pos, stone_color, direction)
     end
-    # binding.break
-
     copy_board(board, copied_board) if !dry_run && turn_succeed
-    # binding.break
-
     turn_succeed
-    # binding.break
   end
 
   def turn(board, target_pos, attack_stone_color, direction)
-    # binding.break
     return false if target_pos.out_of_board?
-    # binding.break
     return false if target_pos.stone_color(board) == attack_stone_color
     return false if target_pos.stone_color(board) == BLANK_CELL
 
     next_pos = target_pos.next_position(direction)
-    # binding.break
     if (next_pos.stone_color(board) == attack_stone_color) || turn(board, next_pos, attack_stone_color, direction)
       board[target_pos.row][target_pos.col] = attack_stone_color
-      # binding.break
       true
     else
       false
@@ -84,20 +73,19 @@ module ReversiMethods
   end
 
   def finished?(board)
-    # binding.break
     !placeable?(board, WHITE_STONE) && !placeable?(board, BLACK_STONE)
   end
 
   def placeable?(board, attack_stone_color)
-    # binding.break
     board.each_with_index do |cols, row|
       cols.each_with_index do |cell, col|
-        next unless cell == BLANK_CELL
-        position = Position.new(row, col)
-        return true if put_stone(board, position.to_cell_ref, attack_stone_color, dry_run: true)
-    # binding.break
+        if cell == BLANK_CELL
+          position = Position.new(row, col)
+          return true if put_stone(board, position.to_cell_ref, attack_stone_color, dry_run: true)
+        end
       end
     end
+    false
   end
 
   def count_stone(board, stone_color)

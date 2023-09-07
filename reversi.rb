@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require_relative './lib/reversi_methods'
-require 'debug'
 
 class Reversi
   include ReversiMethods
@@ -21,7 +20,6 @@ class Reversi
         puts '試合終了'
         puts "白○:#{count_stone(@board, WHITE_STONE)}"
         puts "黒●:#{count_stone(@board, BLACK_STONE)}"
-        # binding.break
         break
       end
 
@@ -33,7 +31,6 @@ class Reversi
 
       print "command? (#{@current_stone == WHITE_STONE ? '白○' : '黒●'}) > "
       command = gets.chomp
-      # binding.break
       break if QUIT_COMMANDS.include?(command)
 
       begin
